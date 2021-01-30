@@ -9,11 +9,20 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 // import HelloWorld from './components/HelloWorld'
 import FooterGuide from './components/FooterGuide/FooterGuide.vue'
 
 export default {
-  name: 'App',
+	name: 'App',
+	
+	mounted(){
+		// this.$store.dispatch('getAddress');
+		this.getAddress();
+	},
+	methods: {
+		...mapActions(['getAddress'])
+	},
   components: {
 		// HelloWorld
 		FooterGuide
