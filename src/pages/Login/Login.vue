@@ -41,7 +41,8 @@
                 </section>
                 <section class="login_message">
                   <input type="text" maxlength="11" placeholder="verification code" v-model="captcha">
-                  <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                  <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha"
+											@click="getCaptcha" ref="captcha">
                 </section>
               </section>
             </div>
@@ -59,7 +60,7 @@
 
 <script>
 import AlertTip from '../../components/AlertTip/AlertTip'
-
+import {reqSendCode, reqSmsLogin, reqPwdLogin} from '../../api'
 export default {
 	data(){
 		return {
@@ -82,20 +83,30 @@ export default {
 	},
 	methods:{
 		//async get text verification code
-		getCode(){
+		async getCode(){
 			//if no countdown for now
 			if(!this.computeTime){
 				//start countdown
 				this.computeTime = 30;
-				const intervalId = setInterval(()=>{
+				this.intervalId = setInterval(()=>{
 					this.computeTime--
 					if(this.computeTime <= 0){
 						//stop countdown
-						clearInterval(intervalId)
+						clearInterval(this.intervalId)
 					}
 				}, 1000)
 				//send ajax request(send verification text msg to mobile)
-
+				const result = await reqSendCode(this.phone)
+				if(result.code ===1 ){
+					//display tip
+					this.showAlert(result.msg)
+					//end countdown
+					if(this.computeTime){
+						this.computeTime = 0
+						clearInterval(this.intervalId)
+						this.intervalId = undefined
+					}
+				}
 			}
 			
 		},
@@ -105,36 +116,73 @@ export default {
 			this.alertText =  alertText
 		},
 
-		login(){
-			console.log('loginnnnn')
+		async login(){
+			// console.log('loginnnnn')
+			let result
 			//form validation
 			if(this.loginMethod){ //text login
 				const {rightPhone, phone, code} = this
 				if(!this.rightPhone){
 					//mobile number incorrect
 					this.showAlert('Mobile Number incorrect.')
-				}else if(/^\d{6}$/.test(code)){
+					return
+				}else if(!/^\d{6}$/.test(code)){
 					//verification code has to be 6-digit number.
 					this.showAlert('Verification code has to be 6-digit number.')
+					return
 				}
+				//send ajax request sms login
+				result = await reqSmsLogin(phone, code)
+
 			}else{ //password login
 				const {name, pwd, captcha} = this
 				if(!this.name){
 					//username cannot be empty
 					this.showAlert('Username cannot be empty.')
+					return
 				}else if(!this.pwd){
 					//password cannot be empty
 					this.showAlert('Password cannot be empty.')
+					return
 				}else if(!this.captcha){
 					//captcha cannot be empty
 					this.showAlert('Captcha cannot be empty.')
+					return
 				}
+				//send ajax request pwd login
+				result = await reqPwdLogin({name, pwd, captcha})
 			}
+			//end countdown
+			if(this.computeTime){
+				this.computeTime = 0
+				clearInterval(this.intervalId)
+				this.intervalId = undefined
+			}
+			
+			//handle data based on result
+			if(result.code===0){
+				const user = result.data
+				//save user into vuex's state
+
+				//go to profile page
+				this.$router.replace('/profile')
+			}else{
+				//show new picture verification code
+				this.getCaptcha()
+				//show waring msg
+				const msg = result.msg
+				this.showAlert(msg)
+			}
+
 		},
 
 		closeTip(){
 			this.alertShow = false
 			this.alertText =  ''
+		},
+		//get new picture varification code every time
+		getCaptcha(){
+			this.$refs.captcha.src = 'http://localhost:4000/captcha?time='+Date.now()
 		}
 	},
 
