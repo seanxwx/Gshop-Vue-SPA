@@ -8,4 +8,8 @@ export default{
 	address: {},
 	categories: [],
 	shops: [],
+	userInfo: {},
+	goods: [],
+	ratings: [],
+	info: {}
 }

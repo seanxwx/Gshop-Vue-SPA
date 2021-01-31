@@ -39,6 +39,9 @@ export default {
 			.icon-sousuo
 				font-size 25px
 				color #fff
+			.icon-icon-sousuo
+				font-size 25px
+				color #fff
 		.header_title
 			position absolute
 			top 50%

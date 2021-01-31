@@ -2,13 +2,19 @@
      <section class="msite">
         <!--Main Header-->
 				<HeaderTop :title="address.name">
-					<span class="header_search" slot="left">
-            <i class="iconfont icon-sousuo"></i>
-          </span>
-					<span class="header_login" slot="right">
-            <span class="header_login_text">Login|Register</span>
-          </span>
-				</HeaderTop>	
+					<router-link class="header_search" slot="left" to="/search">
+							<i class="iconfont icon-icon-sousuo"></i>
+          </router-link>
+					<router-link class="header_login" slot="right" :to="userInfo._id ? '/userinfo' : '/login' ">
+            <span class="header_login_text" v-if="!userInfo._id">
+								Login|Register
+						</span>
+						<span class="header_login_text" v-else>
+							<i class="iconfont icon-person"></i>
+						</span>
+						
+          </router-link>
+				</HeaderTop>router-link	
         <!--Mian Navi-->
         <nav class="msite_nav">
           <div class="swiper-container" v-if="categories.length">
@@ -58,7 +64,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(['address', 'categories']),
+		...mapState(['address', 'categories', 'userInfo']),
 		/*
 		base on categories one demensional arrary, generate a 2-demensional array
 		max items in small array is 8

@@ -3,7 +3,7 @@
 
 import ajax from './ajax'
 // const BASE_URL = 'http://localhost:4000'
-  const BASE_URL = '/api'
+const BASE_URL = '/api'
 
 //token: ecedc31ba6284c56805be865df92ddb5
 // 1、根据经纬度获取位置详情
@@ -26,3 +26,10 @@ export const reqSmsLogin = (phone, code) => ajax(BASE_URL + '/login_sms' , {phon
 export const reqUserInfo = () => ajax(BASE_URL + '/userinfo')
 // 10、用户登出
 export const reqLogout = () => ajax(BASE_URL + '/logout')
+
+//get goods
+export const reqShopInfo = () => ajax('/info')
+//get ratings
+export const reqShopRatings = () => ajax('/ratings')
+//get info
+export const reqShopGoods = () => ajax('/goods')

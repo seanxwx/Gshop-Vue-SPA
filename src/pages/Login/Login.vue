@@ -163,7 +163,7 @@ export default {
 			if(result.code===0){
 				const user = result.data
 				//save user into vuex's state
-
+				this.$store.dispatch('recordUser', user)
 				//go to profile page
 				this.$router.replace('/profile')
 			}else{
