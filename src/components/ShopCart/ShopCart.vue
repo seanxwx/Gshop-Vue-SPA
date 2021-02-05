@@ -18,23 +18,25 @@
 					</div>
 				</div>
 			</div>
-			<div class="shopcart-list" v-show="listShow">
-				<div class="list-header">
-					<h1 class="title">Shopping Cart</h1>
-					<span class="empty">Empty</span>
+			<transition name="move">
+				<div class="shopcart-list" v-show="listShow">
+					<div class="list-header">
+						<h1 class="title">Shopping Cart</h1>
+						<span class="empty" @click="clearCart">Empty</span>
+					</div>
+					<div class="list-content">
+						<ul>
+							<li class="food" v-for="(food, index) in cartFoods" :key="index">
+								<span class="name">{{food.name}}</span>
+								<div class="price">${{food.price}}</div>
+								<div class="cartcontrol-wrapper">
+									<CartControl :food="food"/>
+								</div>
+							</li>
+						</ul>
+					</div>	
 				</div>
-				<div class="list-content">
-					<ul>
-						<li class="food" v-for="(food, index) in cartFoods" :key="index">
-							<span class="name">{{food.name}}</span>
-							<div class="price">${{food.price}}</div>
-							<div class="cartcontrol-wrapper">
-								<CartControl :food="food"/>
-							</div>
-						</li>
-					</ul>
-				</div>
-		</div>
+			</transition>		
 		</div>
 		
 		<div class="list-mask" v-show="listShow" @click="toggleShow"></div>
@@ -42,8 +44,10 @@
 </template>
 
 <script>
+import {MessageBox} from 'mint-ui'
 import {mapState, mapGetters} from 'vuex'
 import CartControl from '../CartControl/CartControl.vue'
+import BScroll from 'better-scroll'
 
 
 export default {
@@ -84,6 +88,19 @@ export default {
 				this.isShow = false
 				return false
 			}
+			if(this.isShow) {
+				this.$nextTick(() => {
+					//make sure it is a single component
+					if(!this.scroll){
+						this.scroll = 	new BScroll('.list-content', {
+						click: true
+					})
+					} else {
+						this.scroll.refresh();//refresh the scroll bar, check the heigh of conent
+					}
+					
+				})
+			}
 			return this.isShow
 		}
 	},
@@ -94,6 +111,12 @@ export default {
 			if(this.totalCount > 0){
 				this.isShow = !this.isShow
 			}
+		},
+		
+		clearCart(){
+			MessageBox.confirm('Are you sure to clean the shopping cart?').then(action => {
+				this.$store.dispatch('clearCart')
+			}, ()=> {});
 		}
 	}
 
@@ -267,7 +290,7 @@ export default {
     opacity 1
     background rgba(7, 17, 27, 0.6)
     &.fade-enter-active, &.fade-leave-active
-      transition all 0.5s
+      transition all 0.53s
     &.fade-enter, &.fade-leave-to
       opacity 0
       background rgba(7, 17, 27, 0)
