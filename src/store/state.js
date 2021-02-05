@@ -6,10 +6,13 @@ export default{
 	latitude: 40.10038,
 	longitude: 116.36867,
 	address: {},
-	categories: [],
-	shops: [],
+	categories: [], //food cate
+	shops: [], 
 	userInfo: {},
-	goods: [],
-	ratings: [],
-	info: {}
+	goods: [], //products list
+	ratings: [], //shop rating
+	info: {}, //shop info
+	cartFoods: [], // foot list in shopping cart
+	
+
 }

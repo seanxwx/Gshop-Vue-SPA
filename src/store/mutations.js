@@ -1,7 +1,7 @@
 /*
 object which using multiple methods to direct update state 
 */
-
+import Vue from 'vue'
 import {
 	RECEIVE_ADDRESS,
 	RECEIVE_CATEGORIES,
@@ -11,6 +11,8 @@ import {
 	RECEIVE_GOODS,
 	RECEIVE_RATINGS,
 	RECEIVE_INFO,
+	INCREMENT_FOOD_COUNT,
+	DECREMENT_FOOD_COUNT,
 } from './mutation-types';
 
 export default{
@@ -38,4 +40,29 @@ export default{
 	[RECEIVE_INFO] (state, {info}){
 		state.info = info
 	},
+	[INCREMENT_FOOD_COUNT] (state, {food}){
+		if(!food.count) { //first time
+			// food.count = 1
+			/*
+			object
+			element name
+			element value
+			*/
+			Vue.set(food, 'count', 1)//make new element also has data binding
+			//add food into cartFoods
+			state.cartFoods.push(food)
+		}else{
+			food.count++
+		}
+	},
+	[DECREMENT_FOOD_COUNT] (state, {food}){
+		if(food.count){
+			food.count--
+			if(food.count==0){
+				//remove food from cartFoods
+				state.cartFoods.splice(state.cartFoods.indexOf(food), 1)
+			}
+		}
+	},
+	
 }

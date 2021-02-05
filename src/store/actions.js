@@ -9,7 +9,9 @@ import {
 	RESET_USER_INFO,
 	RECEIVE_GOODS,
 	RECEIVE_RATINGS,
-	RECEIVE_INFO
+	RECEIVE_INFO,
+	INCREMENT_FOOD_COUNT,
+	DECREMENT_FOOD_COUNT
 } from './mutation-types';
 
 import {
@@ -23,6 +25,7 @@ import {
 	reqShopRatings,
 	reqShopInfo
 } from '../api';
+import { call } from 'file-loader';
 
 
 export default{
@@ -96,12 +99,23 @@ export default{
 		}
 	},
 
-	async getShopGoods({commit}){
+	async getShopGoods({commit}, callback){
 		const result = await reqShopGoods()
 			if(result.code === 0){
 				const goods = result.data
 				commit(RECEIVE_GOODS, {goods})
+				// once data updated, notify the component
+				callback && callback()
 		}
 	},
+
+	//sync update the count value in food
+	updateFoodCount({commit}, {isAdd, food}){
+		if(isAdd) {
+			commit(INCREMENT_FOOD_COUNT, {food})
+		}else {
+			commit(DECREMENT_FOOD_COUNT, {food})
+		}
+	}
 
 }
