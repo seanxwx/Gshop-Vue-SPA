@@ -1,9 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MSite from '../pages/MSite/MSite.vue'
-import Profile from '../pages/Profile/Profile.vue'
-import Order from '../pages/Order/Order.vue'
-import Search from '../pages/Search/Search.vue'
+
+// import MSite from '../pages/MSite/MSite.vue'
+// import Profile from '../pages/Profile/Profile.vue'
+// import Order from '../pages/Order/Order.vue'
+// import Search from '../pages/Search/Search.vue'
+//router component lazy load
+const MSite = () => import('../pages/MSite/MSite.vue')
+const Profile = () => import('../pages/Profile/Profile.vue')
+const Order = () => import('../pages/Order/Order.vue')
+const Search = () => import('../pages/Search/Search.vue')
+
 import Login from '../pages/Login/Login.vue'
 import Shop from '../pages/Shop/Shop.vue'
 import ShopGoods from '../pages/Shop/ShopGoods/ShopGoods.vue'
@@ -17,7 +24,10 @@ export default new VueRouter({
 	routes: [
 		{
 				path: '/msite',
-				component: MSite,
+				//function which return router component, 
+				//only run the function will load the router component. 
+				//the function will run when request the corresponding router path 
+				component: MSite, 
 				meta: {
 					showFooter: true
 				}

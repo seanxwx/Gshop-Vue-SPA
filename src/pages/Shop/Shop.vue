@@ -3,16 +3,19 @@
 		<ShopHeader />
 		<div class="tab">
 			<div class="tab-item">
-				<router-link to="/shop/goods">Goods</router-link>
+				<router-link to="/shop/goods" replace>Goods</router-link>
 			</div>
 			<div class="tab-item">
-				<router-link to="/shop/ratings">Ratings</router-link>
+				<router-link to="/shop/ratings" replace>Ratings</router-link>
 			</div>
 			<div class="tab-item">
-				<router-link to="/shop/info">Info</router-link>
+				<router-link to="/shop/info" replace>Info</router-link>
 			</div>
 		</div>
-		<router-view></router-view>
+		<!-- cache router component object -->
+		<keep-alive>
+			<router-view />
+		</keep-alive>	
 	</div>
 </template>
 
