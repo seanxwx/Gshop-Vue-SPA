@@ -13,6 +13,5 @@ export default{
 	ratings: [], //shop rating
 	info: {}, //shop info
 	cartFoods: [], // foot list in shopping cart
-	
-
+	searchedShops: [], //seached shop list
 }

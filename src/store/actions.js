@@ -12,7 +12,8 @@ import {
 	RECEIVE_INFO,
 	INCREMENT_FOOD_COUNT,
 	DECREMENT_FOOD_COUNT,
-	CLEAR_CART
+	CLEAR_CART,
+	RECEIVE_SEARCHED_SHOPS
 } from './mutation-types';
 
 import {
@@ -24,7 +25,8 @@ import {
 	reqLogout,
 	reqShopGoods,
 	reqShopRatings,
-	reqShopInfo
+	reqShopInfo,
+	reqSearchShops
 } from '../api';
 import { call } from 'file-loader';
 
@@ -123,6 +125,16 @@ export default{
 	//sync clean the shopping cart
 	clearCart({commit}){
 		commit(CLEAR_CART)
-	}
+	},
+
+	//async get searched shops
+	async searchShops({commit,state}, keyword){
+		const geohash = state.latitude + ',' + state.longitude;
+		const result = await reqSearchShops(geohash, keyword)
+			if(result.code === 0){
+				const searchedShops = result.data
+				commit(RECEIVE_SEARCHED_SHOPS, {searchedShops})
+		}
+	},	 
 
 }

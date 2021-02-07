@@ -14,3 +14,4 @@ export const RECEIVE_INFO = 'receive_info';
 export const INCREMENT_FOOD_COUNT = 'increment_food_count'
 export const DECREMENT_FOOD_COUNT = 'decrememnt_food_count'
 export const CLEAR_CART = 'clear_cart'
+export const RECEIVE_SEARCHED_SHOPS = 'receive_searched_shops'

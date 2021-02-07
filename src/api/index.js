@@ -33,3 +33,4 @@ export const reqShopInfo = () => ajax('/info')
 export const reqShopRatings = () => ajax('/ratings')
 //get info
 export const reqShopGoods = () => ajax('/goods')
+

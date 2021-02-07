@@ -13,7 +13,8 @@ import {
 	RECEIVE_INFO,
 	INCREMENT_FOOD_COUNT,
 	DECREMENT_FOOD_COUNT,
-	CLEAR_CART
+	CLEAR_CART,
+	RECEIVE_SEARCHED_SHOPS
 } from './mutation-types';
 
 export default{
@@ -71,6 +72,10 @@ export default{
 		state.cartFoods.forEach(food => food.count = 0)
 		//remove items from shopping cart
 		state.cartFoods = []
+	},
+
+	[RECEIVE_SEARCHED_SHOPS](state,{searchedShops}){
+		state.searchedShops = searchedShops 
 	}
 	
 }
